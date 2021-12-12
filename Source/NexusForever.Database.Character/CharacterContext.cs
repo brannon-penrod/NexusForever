@@ -40,6 +40,10 @@ namespace NexusForever.Database.Character
         public DbSet<GuildMemberModel> GuildMember { get; set; }
         public DbSet<GuildAchievementModel> GuildAchievement { get; set; }
         public DbSet<GuildDataModel> GuildData { get; set; }
+        public DbSet<GuildActivePerkModel> GuildActivePerk { get; set; }
+        public DbSet<GuildBankModel> GuildBank { get; set; }
+        public DbSet<GuildBankTabModel> GuildBankTab { get; set; }
+        public DbSet<GuildBankTabItemModel> GuildBankTabItem { get; set; }
         public DbSet<ItemModel> Item { get; set; }
         public DbSet<ResidenceModel> Residence { get; set; }
         public DbSet<ResidenceDecor> ResidenceDecor { get; set; }
@@ -1833,6 +1837,148 @@ namespace NexusForever.Database.Character
                     .WithMany(p => p.GuildMember)
                     .HasForeignKey(d => d.Id)
                     .HasConstraintName("FK__guild_member_id__guild_id");
+            });
+
+            modelBuilder.Entity<GuildActivePerkModel>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.PerkId })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("guild_active_perk");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.PerkId)
+                    .HasColumnName("perkId")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.EndTime)
+                    .HasColumnName("endTime")
+                    .HasColumnType("datetime")
+                    .HasDefaultValue(null);
+
+                entity.HasOne(d => d.Guild)
+                    .WithMany(p => p.ActivePerk)
+                    .HasForeignKey(d => d.Id)
+                    .HasConstraintName("FK__guild_active_perk_id__guild_id");
+            });
+
+            modelBuilder.Entity<GuildBankModel>(entity =>
+            {
+                entity.HasKey(e => new { e.Id })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("guild_bank");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Influence)
+                    .HasColumnName("influence")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.DailyInfluenceRemaining)
+                    .HasColumnName("dailyInfluenceRemaining")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Credits)
+                    .HasColumnName("credits")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.HasOne(d => d.Guild)
+                    .WithOne(p => p.GuildBank)
+                    .HasForeignKey<GuildBankModel>(d => d.Id)
+                    .HasConstraintName("FK__guild_bank_id__guild_id");
+            });
+
+            modelBuilder.Entity<GuildBankTabModel>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.Index })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("guild_bank_tab");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Index)
+                    .HasColumnName("index")
+                    .HasColumnType("tinyint(1) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasColumnType("varchar(20)")
+                    .HasDefaultValue("");
+
+                entity.HasOne(d => d.GuildBank)
+                    .WithMany(p => p.GuildBankTab)
+                    .HasForeignKey(d => d.Id)
+                    .HasConstraintName("FK__guild_bank_tab_id__guild_bank_id");
+            });
+
+            modelBuilder.Entity<GuildBankTabItemModel>(entity =>
+            {
+                entity.HasKey(e => new { e.Id, e.TabIndex, e.SlotIndex })
+                    .HasName("PRIMARY");
+
+                entity.ToTable("guild_bank_item");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.ItemId)
+                    .HasColumnName("itemId")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.TabIndex)
+                    .HasColumnName("bankTabIndex")
+                    .HasColumnType("tinyint(1) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.SlotIndex)
+                    .HasColumnName("tabSlotIndex")
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.StackCount)
+                    .HasColumnName("stackCount")
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Charges)
+                    .HasColumnName("charges")
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.Durability)
+                    .HasColumnName("durability")
+                    .HasColumnType("float")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.ExpirationTimeLeft)
+                    .HasColumnName("expirationTimeLeft")
+                    .HasColumnType("int(10) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.HasOne(d => d.GuildBankTab)
+                    .WithMany(p => p.GuildBankTabItem)
+                    .HasForeignKey(d => new { d.Id, d.TabIndex })
+                    .HasConstraintName("FK__guild_bank_tab_item_id_tab_index__guild_bank_tab_id");
             });
 
             modelBuilder.Entity<ItemModel>(entity =>

@@ -11,7 +11,7 @@ using NexusForever.Database.Character;
 namespace NexusForever.Database.Character.Migrations
 {
     [DbContext(typeof(CharacterContext))]
-    [Migration("20211213214455_GuildBank_GuildActivePerk")]
+    [Migration("20211213220644_GuildBank_GuildActivePerk")]
     partial class GuildBank_GuildActivePerk
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1690,19 +1690,13 @@ namespace NexusForever.Database.Character.Migrations
                         .HasDefaultValue((byte)0)
                         .HasColumnName("tabIndex");
 
-                    b.Property<uint>("SlotIndex")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(10) unsigned")
-                        .HasDefaultValue(0u)
-                        .HasColumnName("slotIndex");
-
                     b.Property<ulong>("ItemGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint(20) unsigned")
                         .HasDefaultValue(0ul)
                         .HasColumnName("itemGuid");
 
-                    b.HasKey("Id", "TabIndex", "SlotIndex")
+                    b.HasKey("Id", "TabIndex")
                         .HasName("PRIMARY");
 
                     b.HasIndex("ItemGuid")

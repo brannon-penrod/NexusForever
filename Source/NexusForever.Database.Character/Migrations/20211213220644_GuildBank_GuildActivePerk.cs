@@ -77,12 +77,11 @@ namespace NexusForever.Database.Character.Migrations
                 {
                     id = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
                     tabIndex = table.Column<byte>(type: "tinyint(1) unsigned", nullable: false, defaultValue: (byte)0),
-                    slotIndex = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u),
                     itemGuid = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.id, x.tabIndex, x.slotIndex });
+                    table.PrimaryKey("PRIMARY", x => new { x.id, x.tabIndex });
                     table.ForeignKey(
                         name: "FK__guild_bank_tab_item_id_tab_index__guild_bank_tab_id",
                         columns: x => new { x.id, x.tabIndex },

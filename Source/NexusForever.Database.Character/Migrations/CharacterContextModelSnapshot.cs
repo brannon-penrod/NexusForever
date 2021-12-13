@@ -1688,19 +1688,13 @@ namespace NexusForever.Database.Character.Migrations
                         .HasDefaultValue((byte)0)
                         .HasColumnName("tabIndex");
 
-                    b.Property<uint>("SlotIndex")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(10) unsigned")
-                        .HasDefaultValue(0u)
-                        .HasColumnName("slotIndex");
-
                     b.Property<ulong>("ItemGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint(20) unsigned")
                         .HasDefaultValue(0ul)
                         .HasColumnName("itemGuid");
 
-                    b.HasKey("Id", "TabIndex", "SlotIndex")
+                    b.HasKey("Id", "TabIndex")
                         .HasName("PRIMARY");
 
                     b.HasIndex("ItemGuid")

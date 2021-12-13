@@ -1932,7 +1932,7 @@ namespace NexusForever.Database.Character
             {
                 entity.ToTable("guild_bank_tab_item");
 
-                entity.HasKey(e => new { e.Id, e.TabIndex, e.SlotIndex })
+                entity.HasKey(e => new { e.Id, e.TabIndex })
                     .HasName("PRIMARY");
 
                 entity.HasIndex(e => e.ItemGuid)
@@ -1947,11 +1947,6 @@ namespace NexusForever.Database.Character
                 entity.Property(e => e.TabIndex)
                     .HasColumnName("tabIndex")
                     .HasColumnType("tinyint(1) unsigned")
-                    .HasDefaultValue(0);
-
-                entity.Property(e => e.SlotIndex)
-                    .HasColumnName("slotIndex")
-                    .HasColumnType("int(10) unsigned")
                     .HasDefaultValue(0);
 
                 entity.Property(e => e.ItemGuid)

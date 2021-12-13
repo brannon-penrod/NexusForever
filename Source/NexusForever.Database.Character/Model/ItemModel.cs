@@ -14,5 +14,6 @@
 
         public CharacterModel Character { get; set; }
         public CharacterMailAttachmentModel MailAttachment { get; set; }
+        public GuildBankTabItemModel GuildBankTabItem { get; set; }
     }
 }

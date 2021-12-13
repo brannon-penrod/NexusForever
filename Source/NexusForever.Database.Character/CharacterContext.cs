@@ -1841,10 +1841,10 @@ namespace NexusForever.Database.Character
 
             modelBuilder.Entity<GuildActivePerkModel>(entity =>
             {
+                entity.ToTable("guild_active_perk");
+
                 entity.HasKey(e => new { e.Id, e.PerkId })
                     .HasName("PRIMARY");
-
-                entity.ToTable("guild_active_perk");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1869,10 +1869,10 @@ namespace NexusForever.Database.Character
 
             modelBuilder.Entity<GuildBankModel>(entity =>
             {
+                entity.ToTable("guild_bank");
+
                 entity.HasKey(e => new { e.Id })
                     .HasName("PRIMARY");
-
-                entity.ToTable("guild_bank");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1902,10 +1902,10 @@ namespace NexusForever.Database.Character
 
             modelBuilder.Entity<GuildBankTabModel>(entity =>
             {
+                entity.ToTable("guild_bank_tab");
+
                 entity.HasKey(e => new { e.Id, e.Index })
                     .HasName("PRIMARY");
-
-                entity.ToTable("guild_bank_tab");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -1930,55 +1930,44 @@ namespace NexusForever.Database.Character
 
             modelBuilder.Entity<GuildBankTabItemModel>(entity =>
             {
+                entity.ToTable("guild_bank_tab_item");
+
                 entity.HasKey(e => new { e.Id, e.TabIndex, e.SlotIndex })
                     .HasName("PRIMARY");
 
-                entity.ToTable("guild_bank_tab_item");
+                entity.HasIndex(e => e.ItemGuid)
+                    .HasDatabaseName("itemGuid")
+                    .IsUnique();
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("bigint(20) unsigned")
                     .HasDefaultValue(0);
 
-                entity.Property(e => e.ItemId)
-                    .HasColumnName("itemId")
-                    .HasColumnType("bigint(20) unsigned")
-                    .HasDefaultValue(0);
-
                 entity.Property(e => e.TabIndex)
-                    .HasColumnName("bankTabIndex")
+                    .HasColumnName("tabIndex")
                     .HasColumnType("tinyint(1) unsigned")
                     .HasDefaultValue(0);
 
                 entity.Property(e => e.SlotIndex)
-                    .HasColumnName("tabSlotIndex")
+                    .HasColumnName("slotIndex")
                     .HasColumnType("int(10) unsigned")
                     .HasDefaultValue(0);
 
-                entity.Property(e => e.StackCount)
-                    .HasColumnName("stackCount")
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValue(0);
-
-                entity.Property(e => e.Charges)
-                    .HasColumnName("charges")
-                    .HasColumnType("int(10) unsigned")
-                    .HasDefaultValue(0);
-
-                entity.Property(e => e.Durability)
-                    .HasColumnName("durability")
-                    .HasColumnType("float")
-                    .HasDefaultValue(0);
-
-                entity.Property(e => e.ExpirationTimeLeft)
-                    .HasColumnName("expirationTimeLeft")
-                    .HasColumnType("int(10) unsigned")
+                entity.Property(e => e.ItemGuid)
+                    .HasColumnName("itemGuid")
+                    .HasColumnType("bigint(20) unsigned")
                     .HasDefaultValue(0);
 
                 entity.HasOne(d => d.GuildBankTab)
                     .WithMany(p => p.GuildBankTabItem)
                     .HasForeignKey(d => new { d.Id, d.TabIndex })
                     .HasConstraintName("FK__guild_bank_tab_item_id_tab_index__guild_bank_tab_id");
+
+                entity.HasOne(d => d.Item)
+                    .WithOne(p => p.GuildBankTabItem)
+                    .HasForeignKey<GuildBankTabItemModel>(d => d.ItemGuid)
+                    .HasConstraintName("FK__guild_bank_tab_item_item_guid__item_id");
             });
 
             modelBuilder.Entity<ItemModel>(entity =>

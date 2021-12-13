@@ -11,7 +11,7 @@ using NexusForever.Database.Character;
 namespace NexusForever.Database.Character.Migrations
 {
     [DbContext(typeof(CharacterContext))]
-    [Migration("20211212111500_GuildBank_GuildActivePerk")]
+    [Migration("20211213214455_GuildBank_GuildActivePerk")]
     partial class GuildBank_GuildActivePerk
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1688,46 +1688,26 @@ namespace NexusForever.Database.Character.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint(1) unsigned")
                         .HasDefaultValue((byte)0)
-                        .HasColumnName("bankTabIndex");
+                        .HasColumnName("tabIndex");
 
                     b.Property<uint>("SlotIndex")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int(10) unsigned")
                         .HasDefaultValue(0u)
-                        .HasColumnName("tabSlotIndex");
+                        .HasColumnName("slotIndex");
 
-                    b.Property<uint>("Charges")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(10) unsigned")
-                        .HasDefaultValue(0u)
-                        .HasColumnName("charges");
-
-                    b.Property<float>("Durability")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0f)
-                        .HasColumnName("durability");
-
-                    b.Property<uint>("ExpirationTimeLeft")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(10) unsigned")
-                        .HasDefaultValue(0u)
-                        .HasColumnName("expirationTimeLeft");
-
-                    b.Property<ulong>("ItemId")
+                    b.Property<ulong>("ItemGuid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint(20) unsigned")
                         .HasDefaultValue(0ul)
-                        .HasColumnName("itemId");
-
-                    b.Property<uint>("StackCount")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int(10) unsigned")
-                        .HasDefaultValue(0u)
-                        .HasColumnName("stackCount");
+                        .HasColumnName("itemGuid");
 
                     b.HasKey("Id", "TabIndex", "SlotIndex")
                         .HasName("PRIMARY");
+
+                    b.HasIndex("ItemGuid")
+                        .IsUnique()
+                        .HasDatabaseName("itemGuid");
 
                     b.ToTable("guild_bank_tab_item", (string)null);
                 });
@@ -2612,6 +2592,13 @@ namespace NexusForever.Database.Character.Migrations
 
             modelBuilder.Entity("NexusForever.Database.Character.Model.GuildBankTabItemModel", b =>
                 {
+                    b.HasOne("NexusForever.Database.Character.Model.ItemModel", "Item")
+                        .WithOne("GuildBankTabItem")
+                        .HasForeignKey("NexusForever.Database.Character.Model.GuildBankTabItemModel", "ItemGuid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__guild_bank_tab_item_item_guid__item_id");
+
                     b.HasOne("NexusForever.Database.Character.Model.GuildBankTabModel", "GuildBankTab")
                         .WithMany("GuildBankTabItem")
                         .HasForeignKey("Id", "TabIndex")
@@ -2620,6 +2607,8 @@ namespace NexusForever.Database.Character.Migrations
                         .HasConstraintName("FK__guild_bank_tab_item_id_tab_index__guild_bank_tab_id");
 
                     b.Navigation("GuildBankTab");
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("NexusForever.Database.Character.Model.GuildBankTabModel", b =>
@@ -2822,6 +2811,8 @@ namespace NexusForever.Database.Character.Migrations
 
             modelBuilder.Entity("NexusForever.Database.Character.Model.ItemModel", b =>
                 {
+                    b.Navigation("GuildBankTabItem");
+
                     b.Navigation("MailAttachment");
                 });
 

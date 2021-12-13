@@ -76,25 +76,33 @@ namespace NexusForever.Database.Character.Migrations
                 columns: table => new
                 {
                     id = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
-                    bankTabIndex = table.Column<byte>(type: "tinyint(1) unsigned", nullable: false, defaultValue: (byte)0),
-                    tabSlotIndex = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u),
-                    itemId = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
-                    stackCount = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u),
-                    charges = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u),
-                    durability = table.Column<float>(type: "float", nullable: false, defaultValue: 0f),
-                    expirationTimeLeft = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u)
+                    tabIndex = table.Column<byte>(type: "tinyint(1) unsigned", nullable: false, defaultValue: (byte)0),
+                    slotIndex = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u),
+                    itemGuid = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.id, x.bankTabIndex, x.tabSlotIndex });
+                    table.PrimaryKey("PRIMARY", x => new { x.id, x.tabIndex, x.slotIndex });
                     table.ForeignKey(
                         name: "FK__guild_bank_tab_item_id_tab_index__guild_bank_tab_id",
-                        columns: x => new { x.id, x.bankTabIndex },
+                        columns: x => new { x.id, x.tabIndex },
                         principalTable: "guild_bank_tab",
                         principalColumns: new[] { "id", "index" },
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK__guild_bank_tab_item_item_guid__item_id",
+                        column: x => x.itemGuid,
+                        principalTable: "item",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "itemGuid",
+                table: "guild_bank_tab_item",
+                column: "itemGuid",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

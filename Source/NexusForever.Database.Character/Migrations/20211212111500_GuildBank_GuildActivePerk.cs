@@ -72,7 +72,7 @@ namespace NexusForever.Database.Character.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "guild_bank_item",
+                name: "guild_bank_tab_item",
                 columns: table => new
                 {
                     id = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
@@ -103,7 +103,7 @@ namespace NexusForever.Database.Character.Migrations
                 name: "guild_active_perk");
 
             migrationBuilder.DropTable(
-                name: "guild_bank_item");
+                name: "guild_bank_tab_item");
 
             migrationBuilder.DropTable(
                 name: "guild_bank_tab");

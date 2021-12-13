@@ -1933,7 +1933,7 @@ namespace NexusForever.Database.Character
                 entity.HasKey(e => new { e.Id, e.TabIndex, e.SlotIndex })
                     .HasName("PRIMARY");
 
-                entity.ToTable("guild_bank_item");
+                entity.ToTable("guild_bank_tab_item");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")

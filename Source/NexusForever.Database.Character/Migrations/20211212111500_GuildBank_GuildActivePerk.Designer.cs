@@ -1729,7 +1729,7 @@ namespace NexusForever.Database.Character.Migrations
                     b.HasKey("Id", "TabIndex", "SlotIndex")
                         .HasName("PRIMARY");
 
-                    b.ToTable("guild_bank_item", (string)null);
+                    b.ToTable("guild_bank_tab_item", (string)null);
                 });
 
             modelBuilder.Entity("NexusForever.Database.Character.Model.GuildBankTabModel", b =>

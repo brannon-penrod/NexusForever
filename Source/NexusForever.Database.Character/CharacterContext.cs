@@ -40,7 +40,6 @@ namespace NexusForever.Database.Character
         public DbSet<GuildMemberModel> GuildMember { get; set; }
         public DbSet<GuildAchievementModel> GuildAchievement { get; set; }
         public DbSet<GuildDataModel> GuildData { get; set; }
-        public DbSet<GuildActivePerkModel> GuildActivePerk { get; set; }
         public DbSet<GuildBankModel> GuildBank { get; set; }
         public DbSet<GuildBankTabModel> GuildBankTab { get; set; }
         public DbSet<GuildBankTabItemModel> GuildBankTabItem { get; set; }
@@ -1839,34 +1838,6 @@ namespace NexusForever.Database.Character
                     .HasConstraintName("FK__guild_member_id__guild_id");
             });
 
-            modelBuilder.Entity<GuildActivePerkModel>(entity =>
-            {
-                entity.ToTable("guild_active_perk");
-
-                entity.HasKey(e => new { e.Id, e.PerkId })
-                    .HasName("PRIMARY");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasColumnType("bigint(20) unsigned")
-                    .HasDefaultValue(0);
-
-                entity.Property(e => e.PerkId)
-                    .HasColumnName("perkId")
-                    .HasColumnType("bigint(20) unsigned")
-                    .HasDefaultValue(0);
-
-                entity.Property(e => e.EndTime)
-                    .HasColumnName("endTime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValue(null);
-
-                entity.HasOne(d => d.Guild)
-                    .WithMany(p => p.ActivePerk)
-                    .HasForeignKey(d => d.Id)
-                    .HasConstraintName("FK__guild_active_perk_id__guild_id");
-            });
-
             modelBuilder.Entity<GuildBankModel>(entity =>
             {
                 entity.ToTable("guild_bank");
@@ -1889,8 +1860,13 @@ namespace NexusForever.Database.Character
                     .HasColumnType("bigint(20) unsigned")
                     .HasDefaultValue(0);
 
-                entity.Property(e => e.Credits)
-                    .HasColumnName("credits")
+                entity.Property(e => e.Money)
+                    .HasColumnName("money")
+                    .HasColumnType("bigint(20) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.WarCoins)
+                    .HasColumnName("warCoins")
                     .HasColumnType("bigint(20) unsigned")
                     .HasDefaultValue(0);
 
@@ -1947,6 +1923,11 @@ namespace NexusForever.Database.Character
                 entity.Property(e => e.TabIndex)
                     .HasColumnName("tabIndex")
                     .HasColumnType("tinyint(1) unsigned")
+                    .HasDefaultValue(0);
+
+                entity.Property(e => e.SlotIndex)
+                    .HasColumnName("slotIndex")
+                    .HasColumnType("int(10) unsigned")
                     .HasDefaultValue(0);
 
                 entity.Property(e => e.ItemGuid)

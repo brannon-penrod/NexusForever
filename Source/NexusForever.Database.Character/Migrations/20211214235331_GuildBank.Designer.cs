@@ -11,8 +11,8 @@ using NexusForever.Database.Character;
 namespace NexusForever.Database.Character.Migrations
 {
     [DbContext(typeof(CharacterContext))]
-    [Migration("20211213220644_GuildBank_GuildActivePerk")]
-    partial class GuildBank_GuildActivePerk
+    [Migration("20211214235331_GuildBank")]
+    partial class GuildBank
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1620,30 +1620,6 @@ namespace NexusForever.Database.Character.Migrations
                     b.ToTable("guild_achievement", (string)null);
                 });
 
-            modelBuilder.Entity("NexusForever.Database.Character.Model.GuildActivePerkModel", b =>
-                {
-                    b.Property<ulong>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint(20) unsigned")
-                        .HasDefaultValue(0ul)
-                        .HasColumnName("id");
-
-                    b.Property<ulong>("PerkId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint(20) unsigned")
-                        .HasDefaultValue(0ul)
-                        .HasColumnName("perkId");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime")
-                        .HasColumnName("endTime");
-
-                    b.HasKey("Id", "PerkId")
-                        .HasName("PRIMARY");
-
-                    b.ToTable("guild_active_perk", (string)null);
-                });
-
             modelBuilder.Entity("NexusForever.Database.Character.Model.GuildBankModel", b =>
                 {
                     b.Property<ulong>("Id")
@@ -1651,12 +1627,6 @@ namespace NexusForever.Database.Character.Migrations
                         .HasColumnType("bigint(20) unsigned")
                         .HasDefaultValue(0ul)
                         .HasColumnName("id");
-
-                    b.Property<ulong>("Credits")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint(20) unsigned")
-                        .HasDefaultValue(0ul)
-                        .HasColumnName("credits");
 
                     b.Property<ulong>("DailyInfluenceRemaining")
                         .ValueGeneratedOnAdd()
@@ -1669,6 +1639,18 @@ namespace NexusForever.Database.Character.Migrations
                         .HasColumnType("bigint(20) unsigned")
                         .HasDefaultValue(0ul)
                         .HasColumnName("influence");
+
+                    b.Property<ulong>("Money")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint(20) unsigned")
+                        .HasDefaultValue(0ul)
+                        .HasColumnName("money");
+
+                    b.Property<ulong>("WarCoins")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint(20) unsigned")
+                        .HasDefaultValue(0ul)
+                        .HasColumnName("warCoins");
 
                     b.HasKey("Id")
                         .HasName("PRIMARY");
@@ -1695,6 +1677,12 @@ namespace NexusForever.Database.Character.Migrations
                         .HasColumnType("bigint(20) unsigned")
                         .HasDefaultValue(0ul)
                         .HasColumnName("itemGuid");
+
+                    b.Property<uint>("SlotIndex")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int(10) unsigned")
+                        .HasDefaultValue(0u)
+                        .HasColumnName("slotIndex");
 
                     b.HasKey("Id", "TabIndex")
                         .HasName("PRIMARY");
@@ -2560,18 +2548,6 @@ namespace NexusForever.Database.Character.Migrations
                     b.Navigation("Guild");
                 });
 
-            modelBuilder.Entity("NexusForever.Database.Character.Model.GuildActivePerkModel", b =>
-                {
-                    b.HasOne("NexusForever.Database.Character.Model.GuildModel", "Guild")
-                        .WithMany("ActivePerk")
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__guild_active_perk_id__guild_id");
-
-                    b.Navigation("Guild");
-                });
-
             modelBuilder.Entity("NexusForever.Database.Character.Model.GuildBankModel", b =>
                 {
                     b.HasOne("NexusForever.Database.Character.Model.GuildModel", "Guild")
@@ -2789,8 +2765,6 @@ namespace NexusForever.Database.Character.Migrations
             modelBuilder.Entity("NexusForever.Database.Character.Model.GuildModel", b =>
                 {
                     b.Navigation("Achievement");
-
-                    b.Navigation("ActivePerk");
 
                     b.Navigation("GuildBank");
 

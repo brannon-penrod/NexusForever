@@ -4,6 +4,7 @@
     {
         public ulong Id { get; set; }
         public byte TabIndex { get; set; }
+        public uint SlotIndex { get; set; }
         public ulong ItemGuid { get; set; }
 
         public GuildBankTabModel GuildBankTab { get; set; }

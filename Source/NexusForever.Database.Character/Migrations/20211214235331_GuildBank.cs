@@ -1,34 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace NexusForever.Database.Character.Migrations
 {
-    public partial class GuildBank_GuildActivePerk : Migration
+    public partial class GuildBank : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "guild_active_perk",
-                columns: table => new
-                {
-                    id = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
-                    perkId = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
-                    endTime = table.Column<DateTime>(type: "datetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.id, x.perkId });
-                    table.ForeignKey(
-                        name: "FK__guild_active_perk_id__guild_id",
-                        column: x => x.id,
-                        principalTable: "guild",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "guild_bank",
                 columns: table => new
@@ -36,7 +15,8 @@ namespace NexusForever.Database.Character.Migrations
                     id = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
                     influence = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
                     dailyInfluenceRemaining = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
-                    credits = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul)
+                    money = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
+                    warCoins = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul)
                 },
                 constraints: table =>
                 {
@@ -77,6 +57,7 @@ namespace NexusForever.Database.Character.Migrations
                 {
                     id = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul),
                     tabIndex = table.Column<byte>(type: "tinyint(1) unsigned", nullable: false, defaultValue: (byte)0),
+                    slotIndex = table.Column<uint>(type: "int(10) unsigned", nullable: false, defaultValue: 0u),
                     itemGuid = table.Column<ulong>(type: "bigint(20) unsigned", nullable: false, defaultValue: 0ul)
                 },
                 constraints: table =>
@@ -106,9 +87,6 @@ namespace NexusForever.Database.Character.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "guild_active_perk");
-
             migrationBuilder.DropTable(
                 name: "guild_bank_tab_item");
 
